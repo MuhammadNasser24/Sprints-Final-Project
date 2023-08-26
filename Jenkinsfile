@@ -20,12 +20,12 @@ pipeline {
                 script {
                     
                     // Build and push Flask App Docker image to ECR
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_TAG} -f ${FLASK_APP_DOCKERFILE} ."
+                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER} -f ${FLASK_APP_DOCKERFILE} ."
                     sh "aws ecr get-login-password --region <aws-region> | docker login --username AWS --password-stdin ${ECR_REPOSITORY}"
                     sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_TAG}"
                     
                     // Build and push Flask App DB Docker image to ECR
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG} -f ${FLASK_APP_DB_DOCKERFILE} ."
+                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER} -f ${FLASK_APP_DB_DOCKERFILE} ."
                     sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}"
                 }
             }
