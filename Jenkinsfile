@@ -12,7 +12,6 @@ pipeline {
         FLASK_APP_DB_TAG = 'flask-app-db-latest'
         AWS_CREDENTIALS_ID = 'GitCredinstials'
         KUBECONFIG_ID = 'kubeconfig'
-        workspacePath = 'Sprints-FinalProject'
     }
 
     stages {
