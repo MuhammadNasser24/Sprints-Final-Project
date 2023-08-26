@@ -35,11 +35,12 @@ pipeline {
         
         stage('Update Kubernetes Manifests') {
             steps {
-                // updating images in deployment & statefulset manifists with ECR new images
+                // updating images in deployment  manifists with ECR new images
                 
                 def k8sdeploymentfilePath = "${env.WORKSPACE}/${K8S_DEPLOYMENT_FILE}"
-                def k8statefulsetfilePath = "${env.WORKSPACE}/${K8S_STATEFULSET_FILE}"
                 sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER}|g' ${k8sdeploymenfilePath}"
+                // updating images in statefulset manifists with ECR new images 
+                def k8statefulsetfilePath = "${env.WORKSPACE}/${K8S_STATEFULSET_FILE}"
                 sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${k8statefulsetfilePath}"
             }
         }
