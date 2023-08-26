@@ -12,23 +12,20 @@ pipeline {
         FLASK_APP_DB_TAG = 'flask-app-db-latest'
         AWS_CREDENTIALS_ID = 'GitCredinstials'
         KUBECONFIG_ID = 'kubeconfig'
+        AWS_REGION = 'us-east-1'
     }
 
     stages {
         stage('Build and Push Images to ECR') {
             steps {
                 script {
-                    def workspacePath = pwd()  // Get the current workspace path
-                    def appDockerfilePath = "${workspacePath}/${FLASK_APP_DOCKERFILE}"
-                    def dbDockerfilePath = "${workspacePath}/${FLASK_APP_DB_DOCKERFILE}"
-                    
                     // Build and push Flask App Docker image to ECR
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER} -f ${appDockerfilePath} ."
+                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER} -f Docker/FlaskApp/Dockerfile ."
                     sh "aws ecr get-login-password --region <aws-region> | docker login --username AWS --password-stdin ${ECR_REPOSITORY}"
                     sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER}"
                     
                     // Build and push Flask App DB Docker image to ECR
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER} -f ${dbDockerfilePath} ."
+                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER} -f Docker/MySQL_Queries/Dockerfile ."
                     sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER}"
                 }
             }
