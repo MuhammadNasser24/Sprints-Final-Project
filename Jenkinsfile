@@ -21,14 +21,18 @@ pipeline {
                 script {
                     // Build and push Flask App Docker image to ECR
                     def appDockerfilePath = "${env.WORKSPACE}/${FLASK_APP_DOCKERFILE}"
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER} -f ${appDockerfilePath} ${env.WORKSPACE}"
+                    def appImageTag = "build-${BUILD_NUMBER}-${FLASK_IMAGE_NAME}"
+                    def appImageName = "${ECR_REPOSITORY}:${appImageTag}"
+                    sh "docker build -t ${appImageName} -f ${appDockerfilePath} ${env.WORKSPACE}"
                     sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY}"
-                    sh "docker push ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER}"
+                    sh "docker push ${appImageName}"
                     
                     // Build and push Flask App DB Docker image to ECR
                     def dbDockerfilePath = "${env.WORKSPACE}/${FLASK_APP_DB_DOCKERFILE}"
-                    sh "docker build -t ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER} -f ${dbDockerfilePath} ${env.WORKSPACE}"
-                    sh "docker push ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}"
+                    def dbImageTag = "build-${BUILD_NUMBER}-${DB_IMAGE_NAME}"
+                    def dbImageName = "${ECR_REPOSITORY}:${dbImageTag}"
+                    sh "docker build -t ${dbImageName} -f ${dbDockerfilePath} ${env.WORKSPACE}"
+                    sh "docker push ${dbImageName}"
                 }
             }
         }
@@ -36,10 +40,10 @@ pipeline {
         stage('Update Kubernetes Manifests') {
             steps {
                 // updating images in deployment  manifists with ECR new images
-                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER}|g' ${K8S_DEPLOYMENT_FILE}"
+                sh "sed -i 's|image:.*|image: ${appImageName}|g' ${K8S_DEPLOYMENT_FILE}"
                 
                 // updating images in statefulset manifists with ECR new images 
-                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${K8S_STATEFULSET_FILE}"
+                sh "sed -i 's|image:.*|image: ${dbImageName}|g' ${K8S_STATEFULSET_FILE}"
 
                 withAWS(credentials: "${AWS_CREDENTIALS_ID}"){
                     withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG')]) {
