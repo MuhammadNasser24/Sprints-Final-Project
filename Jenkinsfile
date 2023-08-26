@@ -9,7 +9,7 @@ pipeline {
         DB_PATH = 'Docker/MySQL_Queries/Dockerfile'
         DEPLOYMENT_PATH = 'Kubernetes/deploy.yaml'
         STATEFULSET_PATH = 'Kubernetes/mysql-statefulset.yaml'
-        AWS_CREDENTIALS_ID = 'aws'
+        AWS_CREDENTIALS_ID = 'Muhammad Nasser'
         KUBECONFIG_ID = 'kubeconfig'
     }
 
