@@ -8,7 +8,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y default-libmysqlclient-dev && pip install --upgrade pip
 
 # Copy the requirements file into the container
-COPY . requirements.txt
+COPY requirements.txt /app/requirements.txt
 
 # Install the required Python packages
 RUN pip install -r requirements.txt
