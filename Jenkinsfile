@@ -36,7 +36,6 @@ pipeline {
         stage('Update Kubernetes Manifests') {
             steps {
                 // updating images in deployment  manifists with ECR new images
-                
                 sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER}|g' ${K8S_DEPLOYMENT_FILE}"
                 
                 // updating images in statefulset manifists with ECR new images 
@@ -45,7 +44,6 @@ pipeline {
                 withAWS(credentials: "${AWS_CREDENTIALS_ID}"){
                     withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG')]) {
                         sh "kubectl apply -f Kubernetes"
-                
             }
         }
         
@@ -74,4 +72,3 @@ pipeline {
         }
     }
 }
-    }
