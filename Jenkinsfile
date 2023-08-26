@@ -2,11 +2,11 @@ pipeline {
     agent any
     
     environment {
-        FLASK_APP_DOCKERFILE = "CAPSTONE-PROJECT/Docker/FlaskApp/Dockerfile"
-        FLASK_APP_DB_DOCKERFILE = "CAPSTONE-PROJECT/Docker/MySQL_Queries/Dockerfile"
+        FLASK_APP_DOCKERFILE = "Sprints-FinalProject/Docker/FlaskApp/Dockerfile"
+        FLASK_APP_DB_DOCKERFILE = "Sprints-FinalProject/Docker/MySQL_Queries/Dockerfile"
         ECR_REPOSITORY = "263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr"
-        K8S_DEPLOYMENT_FILE = "CAPSTONE-PROJECT/Kubernetes/deploy.yaml"
-        K8S_STATEFULSET_FILE = "CAPSTONE-PROJECT/Kubernetes/mysql-statefulset.yaml"
+        K8S_DEPLOYMENT_FILE = "Sprints-FinalProject/Kubernetes/deploy.yaml"
+        K8S_STATEFULSET_FILE = "Sprints-FinalProject/Kubernetes/mysql-statefulset.yaml"
         EKS_CLUSTER_NAME = 'your-eks-cluster-name'
         FLASK_APP_TAG = 'flask-app-latest'
         FLASK_APP_DB_TAG = 'flask-app-db-latest'
