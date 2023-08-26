@@ -43,7 +43,10 @@ pipeline {
 
                 withAWS(credentials: "${AWS_CREDENTIALS_ID}"){
                     withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG')]) {
-                        sh "kubectl apply -f Kubernetes"
+                        sh "kubectl apply -f ${K8S_DEPLOYMENT_FILE}"
+                        sh "kubectl apply -f ${K8S_STATEFULSET_FILE}"
+                    }
+                }
             }
         }
         
