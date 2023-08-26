@@ -1,70 +1,60 @@
 pipeline {
     agent any
-    
+
     environment {
-        FLASK_APP_DOCKERFILE = 'Docker/FlaskApp/Dockerfile'
-        FLASK_APP_DB_DOCKERFILE = 'Docker/MySQL_Queries/Dockerfile'
         ECR_REPOSITORY = '263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr'
-        K8S_DEPLOYMENT_FILE = 'Kubernetes/deploy.yaml'
-        K8S_STATEFULSET_FILE = 'Kubernetes/mysql-statefulset.yaml'
-        EKS_CLUSTER_NAME = 'Project-eks'
-        AWS_CREDENTIALS_ID = 'GitCredinstials'
-        KUBECONFIG_ID = 'kubeconfig'
-        AWS_REGION = 'us-east-1'
-        FLASK_IMAGE_NAME = 'flaskapp'
+        APP_IMAGE_NAME = 'flaskapp'
         DB_IMAGE_NAME = 'mysql'
+        APP_PATH = 'Docker/FlaskApp/Dockerfile'
+        DB_PATH = 'Docker/MySQL_Queries/Dockerfile'
+        DEPLOYMENT_PATH = 'Kubernetes/deploy.yaml'
+        STATEFULSET_PATH = 'Kubernetes/mysql-statefulset.yaml'
+        AWS_CREDENTIALS_ID = 'aws'
+        KUBECONFIG_ID = 'kubeconfig'
     }
 
     stages {
-        stage('Build and Push Images to ECR') {
+        stage('Build Images') {
             steps {
-                script {
-                    // Build and push Flask App Docker image to ECR
-                    def appDockerfilePath = "${env.WORKSPACE}/${FLASK_APP_DOCKERFILE}"
-                    def appImageTag = "build-${BUILD_NUMBER}-${FLASK_IMAGE_NAME}"
-                    def appImageName = "${ECR_REPOSITORY}:${appImageTag}"
-                    sh "docker build -t ${appImageName} -f ${appDockerfilePath} ${env.WORKSPACE}"
-                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY}"
-                    sh "docker push ${appImageName}"
-                    
-                    // Build and push Flask App DB Docker image to ECR
-                    def dbDockerfilePath = "${env.WORKSPACE}/${FLASK_APP_DB_DOCKERFILE}"
-                    def dbImageTag = "build-${BUILD_NUMBER}-${DB_IMAGE_NAME}"
-                    def dbImageName = "${ECR_REPOSITORY}:${dbImageTag}"
-                    sh "docker build -t ${dbImageName} -f ${dbDockerfilePath} ${env.WORKSPACE}"
-                    sh "docker push ${dbImageName}"
+                // Build and tag images
+                sh "docker build -t ${ECR_REPOSITORY}:${APP_IMAGE_NAME}-${BUILD_NUMBER} -f ${APP_PATH} ."
+                sh "docker build -t ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER} -f ${DB_PATH} ."
+            }
+        }
+
+        stage('Push Images') {
+            steps {
+                withAWS(credentials: "${AWS_CREDENTIALS_ID}") {
+                    sh "(aws ecr get-login-password --region us-east-1) | docker login -u AWS --password-stdin ${ECR_REPOSITORY}"
+                    sh "docker push ${ECR_REPOSITORY}:${APP_IMAGE_NAME}-${BUILD_NUMBER}"
+                    sh "docker push ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}"
                 }
             }
         }
-        
-        stage('Update Kubernetes Manifests') {
-            steps {
-                // updating images in deployment  manifists with ECR new images
-                sh "sed -i 's|image:.*|image: ${appImageName}|g' ${K8S_DEPLOYMENT_FILE}"
-                
-                // updating images in statefulset manifists with ECR new images 
-                sh "sed -i 's|image:.*|image: ${dbImageName}|g' ${K8S_STATEFULSET_FILE}"
 
-                withAWS(credentials: "${AWS_CREDENTIALS_ID}"){
+        stage('Remove Images') {
+            steps {
+                // Delete images from Jenkins server
+                sh "docker rmi ${ECR_REPOSITORY}:${APP_IMAGE_NAME}-${BUILD_NUMBER}"
+                sh "docker rmi ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}"
+            }
+        }
+
+        stage('Deploy k8s Manifests') {
+            steps {
+                // Update images in deployment & statefulset manifests with ECR new images
+                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${APP_IMAGE_NAME}-${BUILD_NUMBER}|g' ${DEPLOYMENT_PATH}"
+                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${STATEFULSET_PATH}"
+                
+                // Deploy Kubernetes manifests in EKS cluster
+                withAWS(credentials: "${AWS_CREDENTIALS_ID}") {
                     withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG')]) {
-                        sh "kubectl apply -f ${K8S_DEPLOYMENT_FILE}"
-                        sh "kubectl apply -f ${K8S_STATEFULSET_FILE}"
+                        sh "kubectl apply -f Kubernetes" // 'Kubernetes' is a directory containing all Kubernetes manifests
                     }
                 }
             }
         }
-        
-        stage('Deploy to EKS') {
-            steps {
-                // Authenticate with EKS cluster
-                sh "aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME}"
-                
-                // Apply the updated Kubernetes manifests
-                sh "kubectl apply -f ${K8S_DEPLOYMENT_FILE}"
-                sh "kubectl apply -f ${K8S_STATEFULSET_FILE}"
-            }
-        }
-        
+
         stage('Website URL') {
             steps {
                 script {
@@ -76,6 +66,15 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo "${JOB_NAME}-${BUILD_NUMBER} pipeline succeeded"
+        }
+        failure {
+            echo "${JOB_NAME}-${BUILD_NUMBER} pipeline failed"
         }
     }
 }
