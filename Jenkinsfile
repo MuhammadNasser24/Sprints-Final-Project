@@ -5,8 +5,8 @@ pipeline {
         FLASK_APP_DOCKERFILE = 'Docker/FlaskApp/Dockerfile'
         FLASK_APP_DB_DOCKERFILE = 'Docker/MySQL_Queries/Dockerfile'
         ECR_REPOSITORY = '263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr'
-        K8S_DEPLOYMENT_FILE = "${env.WORKSPACE}/Kubernetes/deploy.yaml"
-        K8S_STATEFULSET_FILE = "${env.WORKSPACE}/Kubernetes/mysql-statefulset.yaml"
+        K8S_DEPLOYMENT_FILE = 'Kubernetes/deploy.yaml'
+        K8S_STATEFULSET_FILE = 'Kubernetes/mysql-statefulset.yaml'
         EKS_CLUSTER_NAME = 'Project-eks'
         AWS_CREDENTIALS_ID = 'GitCredinstials'
         KUBECONFIG_ID = 'kubeconfig'
@@ -35,9 +35,12 @@ pipeline {
         
         stage('Update Kubernetes Manifests') {
             steps {
-                // updating images in deployment & statefulset manifests with ECR new images
-                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER}|g' ${K8S_DEPLOYMENT_FILE}"
-                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${K8S_STATEFULSET_FILE}"
+                // updating images in deployment & statefulset manifists with ECR new images
+                
+                def k8sdeploymenfilePath = "${env.WORKSPACE}/${K8S_DEPLOYMENT_FILE}"
+                def k8statefulsetfilePath = "${env.WORKSPACE}/${K8S_STATEFULSET_FILE}"
+                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER}|g' ${k8sdeploymenfilePath}"
+                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${k8statefulsetfilePath}"
             }
         }
         
