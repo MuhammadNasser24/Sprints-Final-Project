@@ -37,11 +37,10 @@ pipeline {
             steps {
                 // updating images in deployment  manifists with ECR new images
                 
-
-                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER}|g' ${k8sdeploymentfilePath}"
+                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER}|g' ${K8S_DEPLOYMENT_FILE}"
+                
                 // updating images in statefulset manifists with ECR new images 
-
-                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${k8statefulsetfilePath}"
+                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${K8S_STATEFULSET_FILE}"
             }
         }
         
