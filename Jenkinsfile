@@ -18,8 +18,6 @@ pipeline {
         stage('Build and Push Images to ECR') {
             steps {
                 script {
-                    // Clone the repository
-                    checkout scm
                     
                     // Build and push Flask App Docker image to ECR
                     sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_TAG} -f ${FLASK_APP_DOCKERFILE} ."
