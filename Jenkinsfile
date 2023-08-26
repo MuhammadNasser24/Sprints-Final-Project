@@ -20,28 +20,24 @@ pipeline {
             steps {
                 script {
                     // Build and push Flask App Docker image to ECR
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER} -f Docker/FlaskApp/Dockerfile ."
+                    def appDockerfilePath = "${env.WORKSPACE}/${FLASK_APP_DOCKERFILE}"
+                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER} -f ${appDockerfilePath} ${env.WORKSPACE}"
                     sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY}"
                     sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER}"
                     
                     // Build and push Flask App DB Docker image to ECR
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER} -f Docker/MySQL_Queries/Dockerfile ."
+                    def dbDockerfilePath = "${env.WORKSPACE}/${FLASK_APP_DB_DOCKERFILE}"
+                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER} -f ${dbDockerfilePath} ${env.WORKSPACE}"
                     sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER}"
                 }
-            }
-        }
-        
-        stage('Delete Images from Jenkins Server') {
-            steps {
-                sh "docker rmi ${ECR_REPOSITORY}:${FLASK_APP_TAG} ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}"
             }
         }
         
         stage('Update Kubernetes Manifests') {
             steps {
                 // Update Kubernetes deployment and statefulset manifests
-                sh "sed -i 's|old-image:${FLASK_APP_TAG}|${ECR_REPOSITORY}:${FLASK_APP_TAG}|g' ${K8S_DEPLOYMENT_FILE}"
-                sh "sed -i 's|old-image:${FLASK_APP_DB_TAG}|${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}|g' ${K8S_STATEFULSET_FILE}"
+                sh "sed -i 's|old-image:${FLASK_APP_TAG}|${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER}|g' ${K8S_DEPLOYMENT_FILE}"
+                sh "sed -i 's|old-image:${FLASK_APP_DB_TAG}|${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER}|g' ${K8S_STATEFULSET_FILE}"
             }
         }
         
