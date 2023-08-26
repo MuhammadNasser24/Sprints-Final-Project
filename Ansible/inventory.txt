@@ -1,0 +1,2 @@
+[jenkins]
+54.162.215.44 ansible_user=ubuntu ansible_ssh_private_key_file=/home/kali/Downloads/Capstone-Project.pem
