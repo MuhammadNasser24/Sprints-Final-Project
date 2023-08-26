@@ -7,7 +7,7 @@ pipeline {
         ECR_REPOSITORY = '263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr'
         K8S_DEPLOYMENT_FILE = '/Kubernetes/deploy.yaml'
         K8S_STATEFULSET_FILE = '/Kubernetes/mysql-statefulset.yaml'
-        EKS_CLUSTER_NAME = 'your-eks-cluster-name'
+        EKS_CLUSTER_NAME = 'Project-eks'
         AWS_CREDENTIALS_ID = 'GitCredinstials'
         KUBECONFIG_ID = 'kubeconfig'
         AWS_REGION = 'us-east-1'
