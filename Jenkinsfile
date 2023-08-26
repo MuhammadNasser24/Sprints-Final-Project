@@ -10,7 +10,7 @@ pipeline {
         EKS_CLUSTER_NAME = 'your-eks-cluster-name'
         FLASK_APP_TAG = 'flask-app-latest'
         FLASK_APP_DB_TAG = 'flask-app-db-latest'
-        AWS_CREDENTIALS_ID = 'Muhammad Nasser'
+        AWS_CREDENTIALS_ID = 'GitCredinstials'
         KUBECONFIG_ID = 'kubeconfig'
     }
 
