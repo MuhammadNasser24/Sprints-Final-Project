@@ -18,15 +18,18 @@ pipeline {
         stage('Build and Push Images to ECR') {
             steps {
                 script {
+                    def workspacePath = pwd()  // Get the current workspace path
+                    def appDockerfilePath = "${workspacePath}/${FLASK_APP_DOCKERFILE}"
+                    def dbDockerfilePath = "${workspacePath}/${FLASK_APP_DB_DOCKERFILE}"
                     
                     // Build and push Flask App Docker image to ECR
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER} -f ${FLASK_APP_DOCKERFILE} ."
+                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER} -f ${appDockerfilePath} ."
                     sh "aws ecr get-login-password --region <aws-region> | docker login --username AWS --password-stdin ${ECR_REPOSITORY}"
-                    sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_TAG}"
+                    sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER}"
                     
                     // Build and push Flask App DB Docker image to ECR
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER} -f ${FLASK_APP_DB_DOCKERFILE} ."
-                    sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}"
+                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER} -f ${dbDockerfilePath} ."
+                    sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER}"
                 }
             }
         }
