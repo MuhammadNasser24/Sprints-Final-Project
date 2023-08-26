@@ -14,7 +14,7 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 # Copy the application code into the container
-COPY Docker/FlaskApp .
+COPY . /app/
 
 # Expose the port that the app will run on
 EXPOSE 5000
