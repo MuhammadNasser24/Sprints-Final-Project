@@ -12,7 +12,7 @@ pipeline {
         FLASK_APP_DB_TAG = 'flask-app-db-latest'
         AWS_CREDENTIALS_ID = 'GitCredinstials'
         KUBECONFIG_ID = 'kubeconfig'
-        AWS_REGION = 'us-east-1a'
+        AWS_REGION = 'us-east-1'
     }
 
     stages {
