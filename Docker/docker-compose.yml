@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: ./FlaskApp
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      MYSQL_DB: BucketList
+      MYSQL_PASSWORD: kali
+      MYSQL_USER: root
+      MYSQL_HOST: db
+
+  db:
+    build:
+      context: ./MySQL_Queries
+      dockerfile: Dockerfile.mysql
+    ports:
+      - "3305:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: Kali
