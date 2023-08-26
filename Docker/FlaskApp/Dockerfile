@@ -14,7 +14,7 @@ COPY Docker /app/Docker
 WORKDIR /app/Docker/FlaskApp
 
 # Copy the requirements file into the container
-COPY . requirements.txt
+COPY . /requirements.txt/
 
 # Install the required Python packages
 RUN pip install -r requirements.txt
