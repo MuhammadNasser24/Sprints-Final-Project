@@ -8,11 +8,11 @@ pipeline {
         K8S_DEPLOYMENT_FILE = '/Kubernetes/deploy.yaml'
         K8S_STATEFULSET_FILE = '/Kubernetes/mysql-statefulset.yaml'
         EKS_CLUSTER_NAME = 'your-eks-cluster-name'
-        FLASK_APP_TAG = 'flask-app-latest'
-        FLASK_APP_DB_TAG = 'flask-app-db-latest'
         AWS_CREDENTIALS_ID = 'GitCredinstials'
         KUBECONFIG_ID = 'kubeconfig'
         AWS_REGION = 'us-east-1'
+        FLASK_IMAGE_NAME = 'flaskapp'
+        DB_IMAGE_NAME = 'mysql'
     }
 
     stages {
@@ -21,23 +21,23 @@ pipeline {
                 script {
                     // Build and push Flask App Docker image to ECR
                     def appDockerfilePath = "${env.WORKSPACE}/${FLASK_APP_DOCKERFILE}"
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER} -f ${appDockerfilePath} ${env.WORKSPACE}"
+                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER} -f ${appDockerfilePath} ${env.WORKSPACE}"
                     sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY}"
-                    sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER}"
+                    sh "docker push ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER}"
                     
                     // Build and push Flask App DB Docker image to ECR
                     def dbDockerfilePath = "${env.WORKSPACE}/${FLASK_APP_DB_DOCKERFILE}"
-                    sh "docker build -t ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER} -f ${dbDockerfilePath} ${env.WORKSPACE}"
-                    sh "docker push ${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER}"
+                    sh "docker build -t ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER} -f ${dbDockerfilePath} ${env.WORKSPACE}"
+                    sh "docker push ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}"
                 }
             }
         }
         
         stage('Update Kubernetes Manifests') {
             steps {
-                // Update Kubernetes deployment and statefulset manifests
-                sh "sed -i 's|old-image:${FLASK_APP_TAG}|${ECR_REPOSITORY}:${FLASK_APP_TAG}-${BUILD_NUMBER}|g' ${K8S_DEPLOYMENT_FILE}"
-                sh "sed -i 's|old-image:${FLASK_APP_DB_TAG}|${ECR_REPOSITORY}:${FLASK_APP_DB_TAG}-${BUILD_NUMBER}|g' ${K8S_STATEFULSET_FILE}"
+                // updating images in deployment & statefulset manifists with ECR new images
+                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${FLASK_IMAGE_NAME}-${BUILD_NUMBER}|g' ${K8S_DEPLOYMENT_FILE}"
+                sh "sed -i 's|image:.*|image: ${ECR_REPOSITORY}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${K8S_STATEFULSET_FILE}"
             }
         }
         
