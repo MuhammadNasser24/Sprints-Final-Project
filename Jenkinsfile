@@ -77,6 +77,7 @@ pipeline {
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
                         dir("${workspace}/Sprints-FinalProject/Kubernetes") {
                             sh "pwd"  // Print working directory
+                        }
                             
                         
                         sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
