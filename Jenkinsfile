@@ -68,9 +68,9 @@ pipeline {
 
                             // Use shell command to apply each YAML file
 
-                            sh "xargs -I {} kubectl apply -f {} < ${KubernetesFilePath}/ConfigMap.yaml ${KubernetesFilePath}/app-secrets.yaml
-                             ${KubernetesFilePath}/deploy.yaml ${KubernetesFilePath}/flask-app-deployment.yaml ${KubernetesFilePath}/flaskapp-service.yaml
-                             ${KubernetesFilePath}/ingress-NGINX.yaml ${KubernetesFilePath}/mysql-pv.yaml ${KubernetesFilePath}/mysql-pvc.yaml
+                            sh "xargs -I {} kubectl apply -f {} < ${KubernetesFilePath}/ConfigMap.yaml ${KubernetesFilePath}/app-secrets.yaml ,
+                             ${KubernetesFilePath}/deploy.yaml ${KubernetesFilePath}/flask-app-deployment.yaml ${KubernetesFilePath}/flaskapp-service.yaml ,
+                             ${KubernetesFilePath}/ingress-NGINX.yaml ${KubernetesFilePath}/mysql-pv.yaml ${KubernetesFilePath}/mysql-pvc.yaml ,
                              ${KubernetesFilePath}/mysql-service.yaml ${KubernetesFilePath}/mysql-statefulset.yaml"
                             
                        
