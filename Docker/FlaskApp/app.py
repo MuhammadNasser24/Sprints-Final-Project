@@ -16,20 +16,20 @@ app.config['MYSQL_PORT'] = 3306
 mysql.init_app(app)
 
 # set a secret key for the session
-# import secrets
-# secret_key = secrets.token_hex(16)
+import secrets
+secret_key = secrets.token_hex(16)
 app.secret_key = "No Secrets :)"
 
 ### Here For Readness and Liveness Deployment
 
-# @app.route('/healthz')
-# def health_check():
-#     return "OK", 200
+@app.route('/healthz')
+def health_check():
+    return "OK!", 200
 
 
-# @app.route('/ready')
-# def readiness_check():
-#     return "OK", 200
+@app.route('/ready')
+def readiness_check():
+    return "OK!", 200
 
 @app.route("/")
 def main():
