@@ -24,8 +24,8 @@ pipeline {
     stages {
         stage('Build Docker image for app.py and push it to ECR') {
             steps {
-                withCredentials([string(credentialsId: 'Github Tokens', variable: 'AKIAT2XYJ6R6HU5AXDNI'),
-                                 string(credentialsId: 'Github Tokens', variable: 'In61NaT99xyhSt8v3o3nllWoa2RPhWQpOntTA2I5')]) {
+                withCredentials([string(credentialsId: 'Github Tokens', variable: 'AczKey'),
+                                 string(credentialsId: 'Github Tokens', variable: 'ScrtKey')]) {
                     // Authenticate with AWS ECR to push Docker image
                     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ecr_repository"
                     
@@ -45,8 +45,8 @@ pipeline {
         }
         stage('Build Docker image mysql and push it to ECR') {
             steps {
-                withCredentials([string(credentialsId: 'Github Tokens', variable: 'AKIAT2XYJ6R6HU5AXDNI'),
-                                 string(credentialsId: 'Github Tokens', variable: 'In61NaT99xyhSt8v3o3nllWoa2RPhWQpOntTA2I5')]) {
+                withCredentials([string(credentialsId: 'Github Tokens', variable: 'AczKey'),
+                                 string(credentialsId: 'Github Tokens', variable: 'ScrtKey')]) {
                     // Authenticate with AWS ECR to push Docker image
                     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ecr_repository"
                     
@@ -67,8 +67,8 @@ pipeline {
 
         stage('Apply Kubernetes files') {
             steps {
-                withCredentials([string(credentialsId: 'Github Tokens', variable: 'AKIAT2XYJ6R6HU5AXDNI'),
-                                 string(credentialsId: 'Github Tokens', variable: 'In61NaT99xyhSt8v3o3nllWoa2RPhWQpOntTA2I5')]) {
+                withCredentials([string(credentialsId: 'Github Tokens', variable: 'AczKey'),
+                                 string(credentialsId: 'Github Tokens', variable: 'ScrtKey')]) {
                     // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
                     sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
                     sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
