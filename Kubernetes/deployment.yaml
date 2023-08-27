@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: flask-app-container
-          image: 263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr:build-13-app
+          image: 263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr:build-${BUILD_NUMBER}-app
           resources:
             limits:
               memory: "128Mi"
