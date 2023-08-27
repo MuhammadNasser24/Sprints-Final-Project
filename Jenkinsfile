@@ -53,7 +53,7 @@ pipeline {
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/./mysql-statefulset.yaml"
                         sh "pwd"
                         sh "ls -1 ${KubernetesFilePath}"
-                        sh "kubectl apply -f{KubernetesFilePath} $" 
+                        sh "kubectl apply -f ${KubernetesFilePath}" 
                         
                         }
 
