@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: flask-app-deployment
 spec:
-  replicas: 1  # Number of desired replicas
+  replicas: 1
   selector:
     matchLabels:
       app: flask-app
@@ -14,22 +14,38 @@ spec:
     spec:
       containers:
         - name: flask-app-container
-          image: 263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr:build-13-app  # Replace with your Flask app image
+          image: 263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr:build-13-app
           resources:
             limits:
               memory: "128Mi"
               cpu: "500m"
           ports:
-            - containerPort: 5000  # Port your Flask app listens on
+            - containerPort: 5000
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: MYSQL_USER
+            - name: MYSQL_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: MYSQL_DB
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: MYSQL_HOST
           livenessProbe:
             httpGet:
-              path: /healthz  # Replace with the appropriate health check endpoint
-              port: 5000       # Port your app is listening on
+              path: /healthz
+              port: 5000
             initialDelaySeconds: 5
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /readiness  # Replace with the appropriate readiness check endpoint
-              port: 5000        # Port your app is listening on
+              path: /readiness
+              port: 5000
             initialDelaySeconds: 3
             periodSeconds: 5
