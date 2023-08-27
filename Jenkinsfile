@@ -9,7 +9,6 @@ pipeline {
         imageNameapp = "${ecr_repository}:${imageTagApp}"
         imageTagDb = "build-${BUILD_NUMBER}-db"
         imageNameDB = "${ecr_repository}:${imageTagDb}"
-        KubernetesFilePath = 'Sprints-FinalProject/Kubernetes/'
     }
     
     stages {
@@ -75,7 +74,7 @@ pipeline {
                         // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
                         sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
-                        dir("${workspace}/Sprints-FinalProject/Kubernetes") {
+                        dir("${workspace}/Sprints-FinalProject/Kubernetes/ .") {
                             sh "pwd"  // Print working directory
                         }
                             
