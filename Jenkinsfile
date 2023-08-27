@@ -9,7 +9,7 @@ pipeline {
         imageNameapp = "${ecr_repository}:${imageTagApp}"
         imageTagDb = "build-${BUILD_NUMBER}-db"
         imageNameDB = "${ecr_repository}:${imageTagDb}"
-        KubernetesFilePath = 'Kubernetes'
+        KubernetesFilePath = 'Sprints-FinalProject/Kubernetes'
     }
 
     stages {
@@ -56,8 +56,10 @@ pipeline {
                         sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
                         sh "pwd"
-                        sh "cd Kubernetes"
+                        sh "cd Sprints-FinalProject/Kubernetes"
                         sh "ls -l"
+                        sh"cd Kubernetes"
+                        sh "ls -1"
                         
 
                         sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
