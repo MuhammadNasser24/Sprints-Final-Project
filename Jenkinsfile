@@ -52,6 +52,7 @@ pipeline {
                     
                 ]) {
                     script {
+                        
                         // Replace the placeholder with the actual Docker image in the Kubernetes YAML files...
                         sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
@@ -63,17 +64,26 @@ pipeline {
                         sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
 
                         // Navigate to the Kubernetes directory
+                        
 
-                        dir("${KubernetesFilePath}") {
+                        def kubernetesFiles = [
+                            'ConfigMap.yaml',
+                            'app-secrets.yaml',
+                            'deploy.yaml',
+                            'flask-app-deployment.yaml',
+                            'flaskapp-service.yaml',
+                            'ingress-NGINX.yaml',
+                            'mysql-pv.yaml',
+                            'mysql-pvc.yaml',
+                            'mysql-service.yaml'
+                            ]    
+                        def command = "kubectl apply -f"
+                        kubernetesFiles.each { file ->
+                            command += " ${KubernetesFilePath}/${file}"
+                        }
 
-                            // Use shell command to apply each YAML file
-
-                            sh "xargs -I {} kubectl apply -f {} < ${KubernetesFilePath}/ConfigMap.yaml ${KubernetesFilePath}/app-secrets.yaml ,
-                             ${KubernetesFilePath}/deploy.yaml ${KubernetesFilePath}/flask-app-deployment.yaml ${KubernetesFilePath}/flaskapp-service.yaml ,
-                             ${KubernetesFilePath}/ingress-NGINX.yaml ${KubernetesFilePath}/mysql-pv.yaml ${KubernetesFilePath}/mysql-pvc.yaml ,
-                             ${KubernetesFilePath}/mysql-service.yaml ${KubernetesFilePath}/mysql-statefulset.yaml"
-                            
-                       
+                        sh command
+                        
                         }
                     }
                 }
