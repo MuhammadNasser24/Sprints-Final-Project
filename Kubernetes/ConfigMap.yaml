@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  MYSQL_USER: Kali
+  MYSQL_PASSWORD: Kali
+  MYSQL_DB: BucketList
+  MYSQL_HOST: Root   # This should match the service name for MySQL
