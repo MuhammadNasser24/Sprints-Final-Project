@@ -17,8 +17,8 @@ mysql.init_app(app)
 
 # set a secret key for the session
 import secrets
-secret_key = secrets.token_hex(16)
-app.secret_key = "secret_key"
+secret_key = secrets.token_hex(32)
+app.secret_key = secret_key
 
 ### Here For Readness and Liveness Deployment
 
