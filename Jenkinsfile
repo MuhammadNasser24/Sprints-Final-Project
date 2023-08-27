@@ -62,7 +62,7 @@ pipeline {
                     sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
                     sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
                     
-                    sh "aws eks --region us-east-1 update-kubeconfig --name Sprints-EKS-Cluster"
+                    sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
 
                     // Apply the Kubernetes YAML files
                     sh "kubectl apply -f Kubernetes/ConfigMap.yml"
