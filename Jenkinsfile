@@ -53,7 +53,7 @@ pipeline {
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/./mysql-statefulset.yaml"
                         sh "pwd"
                         sh "ls -1 ${KubernetesFilePath}"
-                        sh "cd ."
+                        sh "cd . && ls -a"
                         
                         // Apply Kubernetes files
                         def kubernetesFiles = [
