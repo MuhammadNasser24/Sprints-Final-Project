@@ -59,10 +59,15 @@ pipeline {
 
                         sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
 
-                        // Apply the Kubernetes YAML files
-                        def kubernetesFiles = findFiles(glob: "${KubernetesFilePath}/*.yaml")
-                        kubernetesFiles.each { file ->
-                            sh "kubectl apply -f ${file}"
+                        // Navigate to the Kubernetes directory
+
+                        dir("${KubernetesFilePath}") {
+
+                            // Use shell command to apply each YAML file
+
+                            sh "ls -1 *.yaml | xargs -I {} kubectl apply -f {}"
+                            
+                       
                         }
                     }
                 }
