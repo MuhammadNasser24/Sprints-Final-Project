@@ -9,16 +9,8 @@ pipeline {
         imageNameapp = "${ecr_repository}:${imageTagApp}"
         imageTagDb = "build-${BUILD_NUMBER}-db"
         imageNameDB = "${ecr_repository}:${imageTagDb}"
-        Kubernetes_confimapfile = 'Kubernetes/ConfigMap.yml'
-        Kubernetes_apps_secretfile = 'Kubernetes/app-secrets.yaml'
-        Kubernetes_deployfile = 'Kubernetes/deploy.yaml'
-        Kubernetes_app_deploy_file = 'Kubernetes/flask-app-deployment.yml'
-        kubernetes_app_service_file = 'Kubernetes/flaskapp-service.yml'
-        kubernetes_ingress_file = 'ingress-NGINX.yml'
-        kubernetes_presistent_volume_file = 'Kubernetes/mysql-pv.yaml'
-        kubernetes_presistent_volume_claim_file = 'Kubernetes/mysql-pvc.yaml'
-        kubernetes_statfulset_file = 'Kubernetes/mysql-statefulset.yaml'
-        kubernetes_mysql_servicefile = 'Kubernetes/mysql-service.yaml'
+        KubernetesFilePath = 'Kubernetes/.'
+
         
     }
     stages {
@@ -77,17 +69,8 @@ pipeline {
 
 
                     // Apply the Kubernetes YAML files
-                    sh "kubectl apply -f ${Kubernetes_confimapfile}"
-                    sh "kubectl apply -f ${Kubernetes_apps_secretfile}"
-                    sh "kubectl apply -f ${Kubernetes_deployfile}"
-                    sh "kubectl apply -f ${Kubernetes_app_deploy_file}"
-                    sh "kubectl apply -f ${kubernetes_app_service_file}"
-                    sh "kubectl apply -f ${kubernetes_ingress_file}"
-                    sh "kubectl apply -f ${kubernetes_presistent_volume_file}"
-                    sh "kubectl apply -f ${kubernetes_presistent_volume_claim_file}"
-                    sh "kubectl apply -f ${kubernetes_statfulset_file}"
-                    sh "kubectl apply -f ${kubernetes_mysql_servicefile}"
-                }
+                    sh "kubectl apply -f ./Kubernetes/."
+                    
             }
         }
         
