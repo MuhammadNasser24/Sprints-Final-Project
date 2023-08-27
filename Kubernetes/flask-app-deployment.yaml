@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: flask-app-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: flask-app
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: your-image-name:tag
+          image: 263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr:build-${BUILD_NUMBER}-app
           ports:
             - containerPort: 5000
           envFrom:
