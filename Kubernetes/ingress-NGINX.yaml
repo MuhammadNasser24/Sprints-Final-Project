@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /  # Rewrite the path to root ("/")
 spec:
   rules:
-    - http: ec2-54-162-215-44.compute-1.amazonaws.com
+    - http: 
         paths:
           - path: /  # Path to match for the Ingress (root path)
             pathType: Prefix  # Type of path matching (prefix)
