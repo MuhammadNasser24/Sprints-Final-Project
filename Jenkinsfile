@@ -56,7 +56,7 @@ pipeline {
                         sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
                         sh "pwd"
-                        sh "cd Sprints-FinalProject/Kubernetes"
+                        sh "cd Kubernetes"
                         sh "ls -l"
                         
 
