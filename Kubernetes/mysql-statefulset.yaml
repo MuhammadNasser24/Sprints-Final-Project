@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: mysql:5.7
+          image: 263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr:build-${BUILD_NUMBER}-app
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: Kali  # Set your desired root password
