@@ -31,13 +31,13 @@ spec:
               memory: "256Mi"  # Initial memory request ( 256 megabytes)
           readinessProbe:
             httpGet:
-              path: /healthz  # Endpoint that indicates readiness
+              path: /  # Endpoint that indicates readiness
               port: 5000
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /healthz  # Endpoint that indicates liveness
+              path: / # Endpoint that indicates liveness
               port: 5000
             initialDelaySeconds: 10
             periodSeconds: 20
