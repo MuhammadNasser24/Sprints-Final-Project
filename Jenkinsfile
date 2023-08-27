@@ -75,7 +75,9 @@ pipeline {
                         // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
                         sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
-                        sh "pwd"
+                        dir("${workspace}/Sprints-FinalProject/Kubernetes") {
+                            sh "pwd"  // Print working directory
+                            
                         
                         sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
                         
