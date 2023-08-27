@@ -13,7 +13,8 @@ pipeline {
     stages {
         stage('Build Docker image for app.py and push it to ECR') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'aws_cred', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                withCredentials([string(credentialsId: 'Muhammad Nasser	', variable: 'AKIAT2XYJ6R6HU5AXDNI'),
+                                 string(credentialsId: 'Muhammad Nasser	', variable: 'In61NaT99xyhSt8v3o3nllWoa2RPhWQpOntTA2I5')]) {
                     // Authenticate with AWS ECR to push Docker image
                     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ecr_repository"
                     
@@ -33,7 +34,8 @@ pipeline {
         }
         stage('Build Docker image mysql and push it to ECR') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'aws_cred', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                withCredentials([string(credentialsId: 'Muhammad Nasser	', variable: 'AKIAT2XYJ6R6HU5AXDNI'),
+                                 string(credentialsId: 'Muhammad Nasser	', variable: 'In61NaT99xyhSt8v3o3nllWoa2RPhWQpOntTA2I5')]) {
                     // Authenticate with AWS ECR to push Docker image
                     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ecr_repository"
                     
@@ -53,11 +55,12 @@ pipeline {
         }
 
         stage('Apply Kubernetes files') {
-            steps{
-                withCredentials([usernamePassword(credentialsId: 'aws_cred', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+            steps {
+                withCredentials([string(credentialsId: 'Muhammad Nasser	', variable: 'AKIAT2XYJ6R6HU5AXDNI'),
+                                 string(credentialsId: 'Muhammad Nasser	', variable: 'In61NaT99xyhSt8v3o3nllWoa2RPhWQpOntTA2I5')]) {
                     // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
-                    sh "sed -i \'s|image:.*|image: ${imageNameapp}|g\' Kubernetes/deploy.yaml"
-                    sh "sed -i \'s|image:.*|image: ${imageNameDB}|g\' Kubernetes/mysql-statefulset.yaml"
+                    sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
+                    sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
                     
                     sh "aws eks --region us-east-1 update-kubeconfig --name Sprints-EKS-Cluster"
 
@@ -73,10 +76,9 @@ pipeline {
                     sh "kubectl apply -f Kubernetes/mysql-service.yaml"
                     sh "kubectl apply -f Kubernetes/mysql-statefulset.yaml"
                 }
-                
-                
-                }
-             }
+            }
+        }
+        
         stage('Retrieve DNS') {
             steps {
                 script {
