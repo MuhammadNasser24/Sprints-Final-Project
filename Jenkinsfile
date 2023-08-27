@@ -9,6 +9,8 @@ pipeline {
         imageNameapp = "${ecr_repository}:${imageTagApp}"
         imageTagDb = "build-${BUILD_NUMBER}-db"
         imageNameDB = "${ecr_repository}:${imageTagDb}"
+        KubernetesFilePath = 'Sprints-FinalProject/Kubernetes'
+        
     }
     
     stages {
@@ -74,15 +76,18 @@ pipeline {
                         // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
                         sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
-                        dir("${workspace}/Sprints-FinalProject/Kubernetes/ .") {
-                            sh "pwd"  // Print working directory
-                        }
+                        sh "pwd"
                             
+
                         
                         sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
+
                         
                         // Apply the Kubernetes YAML files
-                        sh "kubectl apply -f ${KubernetesFilePath}"
+
+                        def kubernetesFiles = findFiles(glob: "${KubernetesFilePath}/*.yaml")
+                        kubernetesFiles.each { file ->
+                            sh "kubectl apply -f ${file}"
                     }
                 }
             }
