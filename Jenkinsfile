@@ -49,8 +49,8 @@ pipeline {
                 ]) {
                     script {
                         // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
-                        sh "sed -i 's|image:.*|image: ${imageNameapp}|g' ${KubernetesFilePath}/flas-app-deployment.yaml"
-                        sh "sed -i 's|image:.*|image: ${imageNameDB}|g' ${KubernetesFilePath}/mysql-statefulset.yaml"
+                        sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/flas-app-deployment.yaml"
+                        sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
                         sh "pwd"
                         sh "ls -1 ${KubernetesFilePath}"
                         sh "kubectl apply -f ${KubernetesFilePath}"
