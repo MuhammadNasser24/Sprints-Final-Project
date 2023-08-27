@@ -44,11 +44,10 @@ pipeline {
         stage('Apply Kubernetes files') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'AczKey', variable: 'AKIAT2XYJ6R6HU5AXDNI'),
-                    string(credentialsId: 'ScrtKey', variable: 'In61NaT99xyhSt8v3o3nllWoa2RPhWQpOntTA2I5')
+                    // Credentials setup...
                 ]) {
                     script {
-                        // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
+                        // Replace the placeholder with the actual Docker image in the Kubernetes YAML files...
                         sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
                         sh "pwd"
