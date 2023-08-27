@@ -9,6 +9,17 @@ pipeline {
         imageNameapp = "${ecr_repository}:${imageTagApp}"
         imageTagDb = "build-${BUILD_NUMBER}-db"
         imageNameDB = "${ecr_repository}:${imageTagDb}"
+        Kubernetes_confimap_file = 'Kubernetes/ConfigMap.yml'
+        Kubernetes_apps_ecret_file = 'Kubernetes/app-secrets.yaml'
+        Kubernetes_deploy_file = 'Kubernetes/deploy.yaml'
+        Kubernetes_app_deploy_file = 'Kubernetes/flask-app-deployment.yml'
+        kubernetes_app_service_file = 'Kubernetes/flaskapp-service.yml'
+        kubernetes_ingress_file = 'ingress-NGINX.yml'
+        kubernetes_presistent_volume_file = 'Kubernetes/mysql-pv.yaml'
+        kubernetes_presistent_volume_claim_file = 'Kubernetes/mysql-pvc.yaml'
+        kubernetes_statfulset_file = 'Kubernetes/mysql-statefulset.yaml'
+        kubernetes_mysql_service_file = 'Kubernetes/mysql-service.yaml'
+        
     }
     stages {
         stage('Build Docker image for app.py and push it to ECR') {
@@ -65,19 +76,17 @@ pipeline {
                     sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
 
 
-                    sh "kubectl apply -f Kubernetes"
-
                     // Apply the Kubernetes YAML files
-                   // sh "kubectl apply -f Sprints-FinalProject/Kubernetes/ConfigMap.yaml"
-                   // sh "kubectl apply -f Sprints-FinalProject/Kubernetes/app-secrets.yaml"
-                   // sh "kubectl apply -f Sprints-FinalProject/Kubernetes/deploy.yaml"
-                   // sh "kubectl apply -f Sprints-FinalProject/Kubernetes/flask-app-deployment.yml"
-                   // sh "kubectl apply -f Sprints-FinalProject/Kubernetes/flaskapp-service.yml"
-                  //  sh "kubectl apply -f Sprints-FinalProject/Kubernetes/ingress-NGINX.yml"
-                 //   sh "kubectl apply -f Sprints-FinalProject/Kubernetes/mysql-pv.yaml"
-                  //  sh "kubectl apply -f Sprints-FinalProject/Kubernetes/mysql-pvc.yaml"
-                  //  sh "kubectl apply -f Sprints-FinalProject/Kubernetes/mysql-service.yaml"
-                   // sh "kubectl apply -f Sprints-FinalProject/Kubernetes/mysql-statefulset.yaml" ///
+                    sh "kubectl apply -f ${Kubernetes_confimap_file}"
+                    sh "kubectl apply -f ${Kubernetes_apps_ecret_file}"
+                    sh "kubectl apply -f ${Kubernetes_deploy_file}"
+                    sh "kubectl apply -f ${Kubernetes_app_deploy_file}"
+                    sh "kubectl apply -f ${kubernetes_app_service_file}"
+                    sh "kubectl apply -f ${kubernetes_ingress_file}"
+                    sh "kubectl apply -f ${kubernetes_presistent_volume_file}"
+                    sh "kubectl apply -f ${kubernetes_presistent_volume_claim_file}"
+                    sh "kubectl apply -f ${kubernetes_statfulset_file}"
+                    sh "kubectl apply -f ${kubernetes_mysql_service_file}"
                 }
             }
         }
