@@ -44,28 +44,17 @@ pipeline {
         stage('Apply Kubernetes files') {
             steps {
                 withCredentials([
-                    
-                    // Credentials setup...
                     string(credentialsId: 'AczKey', variable: 'AKIAT2XYJ6R6HU5AXDNI'),
                     string(credentialsId: 'ScrtKey', variable: 'In61NaT99xyhSt8v3o3nllWoa2RPhWQpOntTA2I5')
-
-                    
                 ]) {
                     script {
-                        
-                        // Replace the placeholder with the actual Docker image in the Kubernetes YAML files...
+                        // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
                         sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deploy.yaml"
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
                         sh "pwd"
                         sh "ls -1 ${KubernetesFilePath}"
-                        sh "xargs -I {} kubectl apply -f {} < ${KubernetesFilePath}/file1.yaml ${KubernetesFilePath}/file2.yaml"
                         
-
-                        sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
-
-                        // Navigate to the Kubernetes directory
-                        
-
+                        // Apply Kubernetes files
                         def kubernetesFiles = [
                             'ConfigMap.yaml',
                             'app-secrets.yaml',
@@ -76,15 +65,14 @@ pipeline {
                             'mysql-pv.yaml',
                             'mysql-pvc.yaml',
                             'mysql-service.yaml'
-                            ]    
+                        ]
                         def command = "kubectl apply -f"
                         kubernetesFiles.each { file ->
                             command += " ${KubernetesFilePath}/${file}"
                         }
-
                         sh command
-                        
-                        }
+
+                        sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
                     }
                 }
             }
@@ -105,4 +93,4 @@ pipeline {
             }
         }
     }
-
+}
