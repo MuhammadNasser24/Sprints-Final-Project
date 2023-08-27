@@ -53,23 +53,8 @@ pipeline {
                         sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/./mysql-statefulset.yaml"
                         sh "pwd"
                         sh "ls -1 ${KubernetesFilePath}"
-                        sh "cd . && ls -a"
+                        sh "kubectl apply -f{KubernetesFilePath} $" 
                         
-                        // Apply Kubernetes files
-                        def kubernetesFiles = [
-                            'ConfigMap.yaml',
-                            'app-secrets.yaml',
-                            'deploy.yaml',
-                            'flask-app-deployment.yaml',
-                            'flaskapp-service.yaml',
-                            'ingress-NGINX.yaml',
-                            'mysql-pv.yaml',
-                            'mysql-pvc.yaml',
-                            'mysql-service.yaml'
-                        ]
-                        def command = "kubectl apply -f"
-                        kubernetesFiles.each { file ->
-                            command += " ${KubernetesFilePath}/${file}"
                         }
 
                         sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
