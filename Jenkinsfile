@@ -9,7 +9,7 @@ pipeline {
         imageNameapp = "${ecr_repository}:${imageTagApp}"
         imageTagDb = "build-${BUILD_NUMBER}-db"
         imageNameDB = "${ecr_repository}:${imageTagDb}"
-        KubernetesFilePath = 'Sprints-FinalProject/Kubernetes'
+        KubernetesFilePath = 'Kubernetes'
     }
 
     stages {
