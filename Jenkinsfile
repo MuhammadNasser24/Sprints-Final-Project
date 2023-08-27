@@ -51,7 +51,7 @@ pipeline {
 
                         sh "pwd"
                         sh "ls -1 ${KubernetesFilePath}"
-                        sh "cd Kubernetes"
+                        sh "cd ${KubernetesFilePath}"
                         sh "ls -i"
                         // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
                         sh "sed -i 's|image:.*|image: ${imageNameapp}|g' flask-app-deployment.yaml"
