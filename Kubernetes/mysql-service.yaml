@@ -9,4 +9,4 @@ spec:
     - protocol: TCP
       port: 3306
       targetPort: 3306
-  clusterIP: None  # This makes it a headless service
+  type: ClusterIP  # Type of The service
