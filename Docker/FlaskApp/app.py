@@ -16,9 +16,10 @@ app.config['MYSQL_PORT'] = 3306
 mysql.init_app(app)
 
 # set a secret key for the session
-import secrets
-secret_key = secrets.token_hex(32)
-app.secret_key = secret_key
+#import secrets
+#secret_key = secrets.token_hex(32)
+#print(secret_key)
+app.secret_key = '0a37a582419f1e879c2ca7d001c7237b701be7ad626e036ee810827c883016a7'
 
 ### Here For Readness and Liveness Deployment
 
