@@ -1,12 +1,13 @@
+# Define a Kubernetes Service for MySQL
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service
+  name: mysql-service   # The name of the Service resource
 spec:
   selector:
-    app: mysql
+    app: mysql   # Select pods with the label 'app: mysql'
+  type: ClusterIP   # Type of service (ClusterIP makes the service accessible only within the cluster)
   ports:
     - protocol: TCP
-      port: 3306
-      targetPort: 3306
-  type: ClusterIP  # Type of The service
+      port: 3306   # Port exposed by the service
+      targetPort: 3306   # Port on the pods the service targets
