@@ -9,7 +9,7 @@ pipeline {
         imageNameapp = "${ecr_repository}:${imageTagApp}"
         imageTagDb = "build-${BUILD_NUMBER}-db"
         imageNameDB = "${ecr_repository}:${imageTagDb}"
-        KubernetesFilePath = 'Kubernetes/.'
+        KubernetesFilePath = 'Sprints-FinalProject/Kubernetes/ .'
 
         
     }
@@ -69,7 +69,7 @@ pipeline {
 
 
                     // Apply the Kubernetes YAML files
-                    sh "kubectl apply -f ./Kubernetes/."
+                    sh "kubectl apply -f ${KubernetesFilePath}"
                     
             }
         }
