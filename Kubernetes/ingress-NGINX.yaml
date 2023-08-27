@@ -15,4 +15,4 @@ spec:
               service:
                 name: flask-app-service  # Name of your Flask app's Service
                 port:
-                  number: 5000  # Port your app listens on
+                  number: 80  # Port your app listens on
