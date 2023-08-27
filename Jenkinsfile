@@ -88,7 +88,7 @@ pipeline {
                         def kubernetesFiles = findFiles(glob: "${KubernetesFilePath}/*.yaml")
                         kubernetesFiles.each { file ->
                             sh "kubectl apply -f ${file}"
-                    }
+                    
                 }
             }
         }
