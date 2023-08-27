@@ -2,13 +2,13 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql-statefulset   # The name of the StatefulSet
+  name: mysql-statefulset   # The name of the StatefulSet resource
 spec:
   replicas: 1   # Number of desired replicas (pods)
   selector:
     matchLabels:
-      app: mysql   # Selector labels to match pods
-  serviceName: mysql-service   # Name of the associated Service
+      app: mysql   # Selector labels to match pods with this label
+  serviceName: mysql-service   # Name of the associated Service resource
   template:
     metadata:
       labels:
@@ -26,9 +26,9 @@ spec:
             - name: MYSQL_ROOT_PASSWORD   # Environment variable name
               valueFrom:
                 secretKeyRef:
-                  name: app-secrets   # Name of the Secret
+                  name: app-secrets   # Name of the Secret resource
                   key: MYSQL_ROOT_PASSWORD   # Key in the Secret for the value
       volumes:
         - name: data-volume   # Name of the volume
           persistentVolumeClaim:
-            claimName: mypvc   # Name of the PersistentVolumeClaim
+            claimName: mypvc   # Name of the PersistentVolumeClaim resource
