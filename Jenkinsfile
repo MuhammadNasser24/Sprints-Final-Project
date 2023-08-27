@@ -65,16 +65,16 @@ pipeline {
                     sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
 
                     // Apply the Kubernetes YAML files
-                    sh "kubectl apply -f Kubernetes/ConfigMap.yml"
-                    sh "kubectl apply -f Kubernetes/app-secrets.yaml"
-                    sh "kubectl apply -f Kubernetes/deploy.yaml"
-                    sh "kubectl apply -f Kubernetes/flask-app-deployment.yml"
-                    sh "kubectl apply -f Kubernetes/flaskapp-service.yml"
-                    sh "kubectl apply -f Kubernetes/ingress-NGINX.yml"
-                    sh "kubectl apply -f Kubernetes/mysql-pv.yaml"
-                    sh "kubectl apply -f Kubernetes/mysql-pvc.yaml"
-                    sh "kubectl apply -f Kubernetes/mysql-service.yaml"
-                    sh "kubectl apply -f Kubernetes/mysql-statefulset.yaml"
+                    sh "kubectl apply -f Sprints-FinalProject/Kubernetes/ConfigMap.yml"
+                    sh "kubectl apply -f Sprints-FinalProject/Kubernetes/app-secrets.yaml"
+                    sh "kubectl apply -f Sprints-FinalProject/Kubernetes/deploy.yaml"
+                    sh "kubectl apply -f Sprints-FinalProject/Kubernetes/flask-app-deployment.yml"
+                    sh "kubectl apply -f Sprints-FinalProject/Kubernetes/flaskapp-service.yml"
+                    sh "kubectl apply -f Sprints-FinalProject/Kubernetes/ingress-NGINX.yml"
+                    sh "kubectl apply -f Sprints-FinalProject/Kubernetes/mysql-pv.yaml"
+                    sh "kubectl apply -f Sprints-FinalProject/Kubernetes/mysql-pvc.yaml"
+                    sh "kubectl apply -f Sprints-FinalProject/Kubernetes/mysql-service.yaml"
+                    sh "kubectl apply -f Sprints-FinalProject/Kubernetes/mysql-statefulset.yaml"
                 }
             }
         }
