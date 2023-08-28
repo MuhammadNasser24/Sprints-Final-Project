@@ -49,6 +49,9 @@ pipeline {
                 ]) {
                     script {
 
+                        def kubeconfigCred = credentials('your-kubeconfig-credential-id')
+                        withCredentials([file(credentialsId: kubeconfigCred, variable: 'KUBECONFIG')])
+
                         sh "pwd"
                         sh "ls -1 ${KubernetesFilePath}"
                         
