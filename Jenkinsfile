@@ -40,8 +40,6 @@ pipeline {
             }
         }
 
-        // Other stages for building and pushing the DB image, and deploying Kubernetes manifests...
-
         stage('Apply Kubernetes files') {
             steps {
                 withCredentials([
@@ -52,14 +50,14 @@ pipeline {
                         withCredentials([file(credentialsId: kubeconfigCred, variable: 'KUBECONFIG')]) {
                             sh "kubectl --kubeconfig=$KUBECONFIG apply -f ${KubernetesFilePath}"
                             sh "cat $KUBECONFIG" 
-                            
+
                             // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
-                            sh "sed -i 's|image:.*|image: ${imageNameapp}|g\' Kubernetes/deployment.yaml"
-                            sh "sed -i 's|image:.*|image: ${imageNameDB}|g\' Kubernetes/statfulset.yaml"
-                            
+                            sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deployment.yaml"
+                            sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/statfulset.yaml"
+
                             // Apply the modified Kubernetes files
                             sh "kubectl apply --kubeconfig=${KUBECONFIG} -f ${KubernetesFilePath}"
-                            
+
                             sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
                         }
                     }
@@ -67,7 +65,17 @@ pipeline {
             }
         }
 
-        // Other stages...
+        stage('Install NGINX Ingress Controller') {
+            steps {
+                script {
+                    // Apply NGINX Ingress Controller manifests
+                    sh "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud/deploy.yaml"
+
+                    // Wait for the NGINX Ingress Controller to be ready
+                    sh "kubectl wait --namespace=ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=180s"
+                }
+            }
+        }
 
         stage('Retrieve DNS') {
             steps {
