@@ -40,6 +40,18 @@ pipeline {
             }
         }
 
+        stage('Install NGINX Ingress Controller') {
+            steps {
+                script {
+                    // Apply NGINX Ingress Controller manifests
+                    sh "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud/deploy.yaml"
+
+                    // Wait for the NGINX Ingress Controller to be ready
+                    sh "kubectl wait --namespace=ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=180s"
+                }
+            }
+        }
+
         stage('Apply Kubernetes files') {
             steps {
                 withCredentials([
@@ -65,17 +77,7 @@ pipeline {
             }
         }
 
-        stage('Install NGINX Ingress Controller') {
-            steps {
-                script {
-                    // Apply NGINX Ingress Controller manifests
-                    sh "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud/deploy.yaml"
-
-                    // Wait for the NGINX Ingress Controller to be ready
-                    sh "kubectl wait --namespace=ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=180s"
-                }
-            }
-        }
+        // Other stages...
 
         stage('Retrieve DNS') {
             steps {
