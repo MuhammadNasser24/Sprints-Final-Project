@@ -2,14 +2,14 @@ pipeline {
     agent any
     environment {
         // Define paths and tags for Docker images
-        docker_file_app = 'Sprints-FinalProject/Docker/FlaskApp/Dockerfile'
-        docker_file_db = 'Sprints-FinalProject/Docker/MySQL_Queries/Dockerfile'
+        docker_file_app = 'Docker/FlaskApp/Dockerfile'
+        docker_file_db = 'Docker/MySQL_Queries/Dockerfile'
         ecr_repository = '263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr'
         imageTagApp = "build-${BUILD_NUMBER}-app"
         imageNameapp = "${ecr_repository}:${imageTagApp}"
         imageTagDb = "build-${BUILD_NUMBER}-db"
         imageNameDB = "${ecr_repository}:${imageTagDb}"
-        KubernetesFilePath = 'Sprints-FinalProject/Kubernetes'
+        KubernetesFilePath = 'Kubernetes'
     }
 
     stages {
