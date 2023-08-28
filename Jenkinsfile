@@ -10,6 +10,7 @@ pipeline {
         imageTagDb = "build-${BUILD_NUMBER}-db"
         imageNameDB = "${ecr_repository}:${imageTagDb}"
         KubernetesFilePath = 'Kubernetes'
+        kubeconfigCred = 'config'
     }
 
     stages {
@@ -48,8 +49,10 @@ pipeline {
                     string(credentialsId: 'ScrtKey', variable: 'In61NaT99xyhSt8v3o3nllWoa2RPhWQpOntTA2I5')
                 ]) {
                     script {
-                        def kubeconfigCred = credentials('your-kubeconfig-credential-id')
-                        def kubeconfigFile = 'config' // Name of the secret file
+                        withCredentials([file(credentialsId: ${kubeconfigCred}, variable: 'KUBECONFIG')]) {
+                            sh "kubectl --kubeconfig=$KUBECONFIG apply -f ${KubernetesFilePath}"
+                        }
+                        
 
                         withCredentials([file(credentialsId: kubeconfigCred, variable: kubeconfigFile)]) {
                             // Apply Kubernetes files using the kubeconfig content from the secret file
