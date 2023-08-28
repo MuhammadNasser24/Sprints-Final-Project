@@ -53,8 +53,8 @@ pipeline {
                         sh "ls -1 ${KubernetesFilePath}"
                         
                         // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
-                        sh "sed -i 's|image:.*|image: ${imageNameapp}|g' /${KubernetesFilePath}"
-                        sh "sed -i 's|image:.*|image: ${imageNameDB}|g' /${KubernetesFilePath}"
+                        sh "sed -i 's|image:.*|image: ${imageNameapp}|g' ${KubernetesFilePath}"
+                        sh "sed -i 's|image:.*|image: ${imageNameDB}|g' ${KubernetesFilePath}"
                         
                         sh "kubectl apply -f ${KubernetesFilePath}"
                         
