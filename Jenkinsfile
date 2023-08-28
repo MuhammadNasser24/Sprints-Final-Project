@@ -54,8 +54,8 @@ pipeline {
                             sh "cat $KUBECONFIG" 
                             
                             // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
-                            sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deployment.yaml"
-                            sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/statfulset.yaml"
+                            sh "sed -i 's|image:.*|image: ${imageNameapp}|g\' Kubernetes/deployment.yaml"
+                            sh "sed -i 's|image:.*|image: ${imageNameDB}|g\' Kubernetes/statfulset.yaml"
                             
                             // Apply the modified Kubernetes files
                             sh "kubectl apply --kubeconfig=${KUBECONFIG} -f ${KubernetesFilePath}"
