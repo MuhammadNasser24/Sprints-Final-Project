@@ -51,12 +51,11 @@ pipeline {
                     script {
                         withCredentials([file(credentialsId: ${kubeconfigCred}, variable: 'KUBECONFIG')]) {
                             sh "kubectl --kubeconfig=$KUBECONFIG apply -f ${KubernetesFilePath}"
+                            sh "cat $KUBECONFIG" 
                         }
-                        
 
-                        withCredentials([file(credentialsId: kubeconfigCred, variable: kubeconfigFile)]) {
-                            // Apply Kubernetes files using the kubeconfig content from the secret file
-                            sh "kubectl apply --kubeconfig=${kubeconfigFile} -f ${KubernetesFilePath}"
+                        
+                    
                             
                             // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
                             sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deployment.yaml"
