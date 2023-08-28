@@ -49,20 +49,16 @@ pipeline {
                     string(credentialsId: 'ScrtKey', variable: 'In61NaT99xyhSt8v3o3nllWoa2RPhWQpOntTA2I5')
                 ]) {
                     script {
-                        withCredentials([file(credentialsId: ${kubeconfigCred}, variable: 'KUBECONFIG')]) {
+                        withCredentials([file(credentialsId: kubeconfigCred, variable: 'KUBECONFIG')]) {
                             sh "kubectl --kubeconfig=$KUBECONFIG apply -f ${KubernetesFilePath}"
                             sh "cat $KUBECONFIG" 
-                        }
-
-                        
-                    
                             
                             // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
                             sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deployment.yaml"
                             sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/statfulset.yaml"
                             
                             // Apply the modified Kubernetes files
-                            sh "kubectl apply --kubeconfig=${kubeconfigFile} -f ${KubernetesFilePath}"
+                            sh "kubectl apply --kubeconfig=${KUBECONFIG} -f ${KubernetesFilePath}"
                             
                             sh "aws eks --region us-east-1 update-kubeconfig --name Project-eks"
                         }
@@ -86,4 +82,4 @@ pipeline {
             }
         }
     }
-
+}
