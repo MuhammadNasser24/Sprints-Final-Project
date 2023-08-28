@@ -101,6 +101,4 @@ Follow the guide to set up the Jenkins pipeline.
 #### This comprehensive DevOps infrastructure deployment endeavor underscores the amalgamation of diverse tools and technologies, culminating in a seamless end-to-end deployment procedure. By following the structured guide, you have effectively established a sturdy pipeline for constructing, deploying, and managing a Flask web application and MySQL database on AWS with Kubernetes. This undertaking establishes a robust basis for refining and enhancing your DevOps practices.
 
 #### You're encouraged to further explore and optimize each component, tailoring the project to your unique requirements. Here's to successful deployments!
-```
 
-Feel free to use this content in your GitHub repository's README, making any necessary adjustments to fit your project's details.
