@@ -2,14 +2,14 @@ pipeline {
     agent any
     environment {
         // Define paths and tags for Docker images
-        docker_file_app = 'Docker/FlaskApp/Dockerfile'
-        docker_file_db = 'Docker/MySQL_Queries/Dockerfile'
+        docker_file_app = 'Sprints-FinalProject/Docker/FlaskApp/Dockerfile'
+        docker_file_db = 'Sprints-FinalProject/Docker/MySQL_Queries/Dockerfile'
         ecr_repository = '263587492988.dkr.ecr.us-east-1.amazonaws.com/ecr-ecr'
         imageTagApp = "build-${BUILD_NUMBER}-app"
         imageNameapp = "${ecr_repository}:${imageTagApp}"
         imageTagDb = "build-${BUILD_NUMBER}-db"
         imageNameDB = "${ecr_repository}:${imageTagDb}"
-        KubernetesFilePath = './Kubernetes'
+        KubernetesFilePath = 'Sprints-FinalProject/Kubernetes'
     }
 
     stages {
@@ -21,7 +21,7 @@ pipeline {
                 ]) {
                     script {
                         // Authenticate with AWS ECR to push Docker image
-                        sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ecr_repository"
+                        sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ecr_repository}"
 
                         // Build Docker image for app.py
                         sh "docker build -t ${imageNameapp} -f ${docker_file_app} ."
@@ -53,8 +53,8 @@ pipeline {
                         sh "ls -1 ${KubernetesFilePath}"
                         
                         // Replace the placeholder with the actual Docker image in the Kubernetes YAML files
-                        sh "sed -i 's|image:.*|image: ${imageNameapp}|g' Kubernetes/deployment.yaml"
-                        sh "sed -i 's|image:.*|image: ${imageNameDB}|g' Kubernetes/mysql-statefulset.yaml"
+                        sh "sed -i 's|image:.*|image: ${imageNameapp}|g' /${KubernetesFilePath}"
+                        sh "sed -i 's|image:.*|image: ${imageNameDB}|g' /${KubernetesFilePath}"
                         
                         sh "kubectl apply -f ${KubernetesFilePath}"
                         
