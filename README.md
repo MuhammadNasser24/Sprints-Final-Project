@@ -71,19 +71,14 @@ cd Ansible
 
 Run Ansible playbook for EC2 configuration:
 ```bash
-ansible-playbook setup.yml
+ansible-playbook -i inventory.txt playbook.yml -e @variables.yml
 ```
 
 ### 5. Constructing Kubernetes Manifests
 
-Navigate to the Kubernetes directory:
-```bash
-cd Kubernetes
-```
-
 Apply Kubernetes manifests:
 ```bash
-kubectl apply -f .
+kubectl apply -f Kubernetes
 ```
 
 ### 6. Orchestrating Jenkins Pipeline
