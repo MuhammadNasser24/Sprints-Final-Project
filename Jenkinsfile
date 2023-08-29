@@ -81,7 +81,6 @@ pipeline {
             }
         }
 
-        // Other stages...
 
         stage('Retrieve DNS') {
             steps {
