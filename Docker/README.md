@@ -3,11 +3,13 @@
 # Docker 
 A platform for developing, shipping, and running applications using containerization. It encapsulates applications and their dependencies into lightweight, portable containers, ensuring consistent environments across different systems and making deployment and scaling more efficient.
 
-## Dockerized MySQL and Flask App    
-
 ## Dockerization - Simplifying Deployment
 
 Dockerization is a method of packaging applications and their dependencies into standardized containers, providing an isolated environment that ensures consistent behavior across various environments. It simplifies deployment, scaling, and management of applications.
+
+
+# Dockerized MySQL and Flask App    
+
 
 ## Docker Installation
 
