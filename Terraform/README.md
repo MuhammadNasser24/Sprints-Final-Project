@@ -1,4 +1,9 @@
-# Using Terraform for Infrastructure Provisioning
+![icons8-terraform-240](https://github.com/MuhammadNasser24/Sprints-FinalProject/assets/121057828/963dff20-f9e2-4952-b61c-56ce17863c15)
+
+# Terraform 
+An open-source infrastructure as code (IaC) tool that enables you to define, deploy, and manage cloud resources using declarative configuration files. It provides a consistent and version-controlled way to provision and update infrastructure across various cloud providers, streamlining automation and collaboration.
+
+## Using Terraform for Infrastructure Provisioning
 
 This project demonstrates the usage of Terraform to provision infrastructure components including an Amazon EKS cluster, an EC2 instance for Jenkins, and an Amazon ECR repository.
 
