@@ -1,3 +1,4 @@
+<a target="_blank" href="https://icons8.com/icon/TkG10j-DmXkU/docker">Docker</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
 # Dockerized MySQL and Flask App
 
