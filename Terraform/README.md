@@ -48,5 +48,3 @@ Remember to clean up your resources when you're done using them:
 
 - Make sure you have configured your AWS credentials before running Terraform commands.
 - This project is my final project, not an example. Review configurations before deploying in production.
-
-```
