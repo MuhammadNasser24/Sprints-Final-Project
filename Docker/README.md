@@ -74,4 +74,3 @@ MySQL-and-Python/
 
 > **Note:** This setup assumes that the Docker images and configurations are suitable for your project's requirements. Be sure to tailor the Dockerfiles, compose configuration, and environment variables to your application's specific needs.
 
-```
