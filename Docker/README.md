@@ -1,6 +1,9 @@
-<a target="_blank" href="https://icons8.com/icon/TkG10j-DmXkU/docker">Docker</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+![icons8-docker-256](https://github.com/MuhammadNasser24/Sprints-FinalProject/assets/121057828/1a53a50b-48b8-4266-906c-5a4207d349f0)
 
-# Dockerized MySQL and Flask App
+# Docker 
+A platform for developing, shipping, and running applications using containerization. It encapsulates applications and their dependencies into lightweight, portable containers, ensuring consistent environments across different systems and making deployment and scaling more efficient.
+
+## Dockerized MySQL and Flask App    
 
 ## Dockerization - Simplifying Deployment
 
