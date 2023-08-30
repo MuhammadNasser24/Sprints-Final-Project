@@ -1,5 +1,5 @@
 
-![icons8-kubernetes-480](https://github.com/MuhammadNasser24/Sprints-FinalProject/assets/121057828/393ef6ba-5c85-4d6b-94f5-f1d5a283ecbf)
+![icons8-kubernetes-480](https://github.com/MuhammadNasser24/Sprints-FinalProject/assets/121057828/c02018f8-a112-4ba5-812d-cb40cef72e06)
 
  ### Kubernetes:
  An open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications. It abstracts the underlying infrastructure, allowing you to focus on application logic. Kubernetes ensures high 
