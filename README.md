@@ -1,4 +1,4 @@
-# Automated DevOps Capstone Project
+# Automated DevOps Project
 
 ## Introduction
 This project focuses on automating the deployment of a Flask web application and MySQL database using Docker containers. The deployment process is streamlined by leveraging a combination of Terraform for infrastructure provisioning, Ansible for server configuration, and Jenkins for continuous integration and deployment (CI/CD), all orchestrated by Kubernetes for container management.
