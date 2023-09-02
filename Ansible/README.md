@@ -1,4 +1,4 @@
-![icons8-ansible-48](https://github.com/MuhammadNasser24/Sprints-Final-Project/assets/121057828/c6cad082-1f33-4267-a6af-44656535f63a)
+![giphy (1)](https://github.com/MuhammadNasser24/Sprints-Final-Project/assets/121057828/e5ec0e35-3540-4fbc-a741-59e33321e4ef)
 
 
 # Ansible 
